@@ -16,6 +16,11 @@ GtPhlowRustView class >> primRelease: aHandle [
 	self ffiCall: #(void phlow_view_drop(void* aHandle))
 ]
 
+{ #category : #accessing }
+GtPhlowRustView class >> viewType [
+	^ self subclassResponsibility
+]
+
 { #category : #converting }
 GtPhlowRustView >> asPhlowView [
 	^ self subclassResponsibility
@@ -24,6 +29,11 @@ GtPhlowRustView >> asPhlowView [
 { #category : #'private - ffi' }
 GtPhlowRustView >> primGetPriority [
 	^ self ffiCall: #(size_t phlow_view_get_priority(self))
+]
+
+{ #category : #'private - ffi' }
+GtPhlowRustView >> primGetSourceCode: aGtBoxerString [
+	^ self ffiCall: #(void phlow_view_get_source_code(self, GtBoxerString aGtBoxerString))
 ]
 
 { #category : #'private - ffi' }
@@ -39,6 +49,13 @@ GtPhlowRustView >> primGetType: aGtBoxerString [
 { #category : #accessing }
 GtPhlowRustView >> priority [
 	^ self primGetPriority
+]
+
+{ #category : #accessing }
+GtPhlowRustView >> sourceCode [
+	| aSourceCode |
+	aSourceCode := GtBoxerString getStringFrom: [ :aGtBoxerString | self primGetSourceCode: aGtBoxerString ].
+	^ GtPhlowRustSourceCode new sourceCode: aSourceCode
 ]
 
 { #category : #accessing }

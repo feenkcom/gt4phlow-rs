@@ -28,10 +28,11 @@ GtPhlowRustViews >> pop [
 	aBaseView := GtPhlowRustView fromHandle: aHandle.
 
 	aViewType := aBaseView type.
-	aViewType = 'list_view'
-		ifTrue: [ ^ GtPhlowRustListView fromNativeHandle: aHandle ].
-		
-	self error: ('Unsupported view type: {1}' format: { aViewType })
+
+	^ GtPhlowRustView allSubclasses
+		detect: [ :eachPhlowClass | eachPhlowClass viewType = aViewType ]
+		ifFound: [ :aPhlowViewClass | aPhlowViewClass fromNativeHandle: aHandle ]
+		ifNone: [ self error: ('Unsupported view type: {1}' format: { aViewType }) ]
 ]
 
 { #category : #accessing }

@@ -17,19 +17,9 @@ GtPhlowRustObject class >> fromInt32: aNumber [
 	^ self fromNativeHandle: (self primFromInt32: aNumber)
 ]
 
-{ #category : #'instance creation' }
-GtPhlowRustObject class >> fromVecInt32 [
-	^ self fromNativeHandle: self primFromVecInt32
-]
-
 { #category : #'private - ffi' }
 GtPhlowRustObject class >> primFromInt32: aNumber [
 	^ self ffiCall: #(void* phlow_to_object_i32(int32 aNumber))
-]
-
-{ #category : #'private - ffi' }
-GtPhlowRustObject class >> primFromVecInt32 [
-	^ self ffiCall: #(void* phlow_to_object_vec_i32())
 ]
 
 { #category : #'private - ffi' }

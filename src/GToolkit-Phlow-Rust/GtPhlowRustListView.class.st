@@ -4,9 +4,15 @@ Class {
 	#category : #'GToolkit-Phlow-Rust-External'
 }
 
+{ #category : #accessing }
+GtPhlowRustListView class >> viewType [
+	^ 'list_view'
+]
+
 { #category : #converting }
 GtPhlowRustListView >> asPhlowView [
 	^ GtPhlowListView new
+		definingMethod: self sourceCode;
 		title: self title;
 		priority: self priority;
 		items: [ GtPhlowRustVectorCollection new vector: self computeItems ];

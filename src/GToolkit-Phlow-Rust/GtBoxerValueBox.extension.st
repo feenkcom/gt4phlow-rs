@@ -24,7 +24,9 @@ GtBoxerValueBox >> gtViewsFor: aView inContext: aContext [
 
 { #category : #'*GToolkit-Phlow-Rust' }
 GtBoxerValueBox >> primToPhlowObject [
-	^ ExternalAddress null
+	"Default implementation. Tries to create a phlow object using data stored
+	in the value box, if any. Override me to customise how objects are converted to value boxes"
+	^ self ffiCall: #(void* boxer_value_box_to_phlow_object(self)) library: GtBoxerLibrary
 ]
 
 { #category : #'*GToolkit-Phlow-Rust' }
