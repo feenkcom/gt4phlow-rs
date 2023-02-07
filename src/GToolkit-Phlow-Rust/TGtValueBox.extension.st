@@ -47,6 +47,20 @@ TGtValueBox >> gtAsPhlowObjectActionFor: anAction [
 ]
 
 { #category : #'*GToolkit-Phlow-Rust' }
+TGtValueBox >> gtPrintFor: aView [
+	<gtView>
+	^ aView textEditor
+		title: 'Print';
+		priority: 110;
+		aptitude: [ self class environment at: #BrGlamorousCodeEditorAptitude ];
+		text: [
+			self
+				asPhlowObjectDo: [ :aPhlowObject | aPhlowObject rustToString ]
+				ifNone: [ self printString asRopedText ] ];
+		actionUpdateButton
+]
+
+{ #category : #'*GToolkit-Phlow-Rust' }
 TGtValueBox >> gtViewsFor: aView inContext: aContext [
 	"Add the declarative views from the inspectors object to the inspectors views"
 	| resultingView inspectorViews |

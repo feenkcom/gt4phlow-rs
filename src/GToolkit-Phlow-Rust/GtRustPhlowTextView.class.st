@@ -15,7 +15,7 @@ GtRustPhlowTextView >> asPhlowView [
 		definingMethod: self sourceCode;
 		title: self title;
 		priority: self priority;
-		text: [ self computeText ];
+		text: [ self computeText asRopedText glamorousRegularFontAndSize ];
 		actionUpdateButton
 ]
 
