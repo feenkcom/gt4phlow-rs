@@ -1,38 +1,35 @@
 Class {
 	#name : #GtPhlowRustViews,
-	#superclass : #GtBoxerValueBox,
-	#category : #'GToolkit-Phlow-Rust-External'
+	#superclass : #GtExternalLibraryBox,
+	#category : #'GToolkit-Phlow-Rust-Utilities'
 }
 
-{ #category : #accessing }
-GtPhlowRustViews class >> ffiLibrary [
-	^ GtPhlowRustLibrary
-]
-
 { #category : #'private - ffi' }
-GtPhlowRustViews class >> primRelease: aHandle [
-	
-	"Plain pointers must be deleted using delete(), all users must implement a specific method"
-	self ffiCall: #(void phlow_views_drop(void* aHandle))
+GtPhlowRustViews class >> primRelease: aHandle library: anFFILibrary [
+	anFFILibrary primPhlowViewsRelease: aHandle
 ]
 
 { #category : #accessing }
 GtPhlowRustViews >> pop [
-	<return: #GtPhlowRustView or: nil>
+	<return: #GtRustPhlowView or: nil>
 	| aHandle aBaseView aViewType |
 
-	aHandle := self primPop.
+	aHandle := self ffiLibrary primPhlowViewsPop: self.
 	aHandle isNull
 		ifTrue: [ ^ nil ].
 	
-	aBaseView := GtPhlowRustView fromHandle: aHandle.
+	aBaseView := GtRustPhlowView
+		fromBorrowedHandle: aHandle
+		library: self ffiLibrary.
 
 	aViewType := aBaseView type.
 
-	^ GtPhlowRustView allSubclasses
+	^ GtRustPhlowView allSubclasses
 		detect: [ :eachPhlowClass | eachPhlowClass viewType = aViewType ]
-		ifFound: [ :aPhlowViewClass | aPhlowViewClass fromNativeHandle: aHandle ]
-		ifNone: [ self error: ('Unsupported view type: {1}' format: { aViewType }) ]
+		ifFound: [ :aPhlowViewClass | aPhlowViewClass fromOwnedHandle: aHandle library: self ffiLibrary ]
+		ifNone: [
+			aBaseView release.
+			self error: ('Unsupported view type: {1}' format: { aViewType }) ]
 ]
 
 { #category : #accessing }
@@ -47,9 +44,4 @@ GtPhlowRustViews >> popAll [
 					aStream nextPut: aMethod.
 					true
 				] ] whileTrue ]
-]
-
-{ #category : #'private - ffi' }
-GtPhlowRustViews >> primPop [
-	^ self ffiCall: #(void* phlow_views_pop(self))
 ]

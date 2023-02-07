@@ -5,7 +5,7 @@ Class {
 		'anyVec',
 		'index'
 	],
-	#category : #'GToolkit-Phlow-Rust-External'
+	#category : #'GToolkit-Phlow-Rust-Utilities'
 }
 
 { #category : #accessing }

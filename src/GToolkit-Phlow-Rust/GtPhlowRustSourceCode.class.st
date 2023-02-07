@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'sourceCode'
 	],
-	#category : #'GToolkit-Phlow-Rust-External'
+	#category : #'GToolkit-Phlow-Rust-Utilities'
 }
 
 { #category : #'gt-extensions' }
@@ -19,8 +19,8 @@ GtPhlowRustSourceCode >> gtRustFor: aView [
 	^ aView textEditor
 		title: 'Rust';
 		priority: 1;
-		aptitude: [ BrGlamorousCodeEditorAptitude ];
-		styler: [ RustParser gtStyler ];
+		aptitude: [ self class environment at: #BrGlamorousCodeEditorAptitude ];
+		styler: [ (self class environment at: #RustParser) gtStyler ];
 		text: [ sourceCode ]
 ]
 

@@ -1,19 +1,12 @@
 Class {
 	#name : #GtPhlowRustObjectVec,
-	#superclass : #GtBoxerValueBox,
-	#category : #'GToolkit-Phlow-Rust-External'
+	#superclass : #GtExternalLibraryBox,
+	#category : #'GToolkit-Phlow-Rust-Utilities'
 }
 
-{ #category : #accessing }
-GtPhlowRustObjectVec class >> ffiLibrary [
-	^ GtPhlowRustLibrary
-]
-
 { #category : #'private - ffi' }
-GtPhlowRustObjectVec class >> primRelease: aHandle [
-	
-	"Plain pointers must be deleted using delete(), all users must implement a specific method"
-	self ffiCall: #(void phlow_object_vec_drop(void* aHandle))
+GtPhlowRustObjectVec class >> primRelease: aHandle library: anFFILibrary [
+	anFFILibrary primPhlowObjectVecRelease: aHandle
 ]
 
 { #category : #accessing }
@@ -23,12 +16,7 @@ GtPhlowRustObjectVec >> at: anIndex [
 		index: anIndex
 ]
 
-{ #category : #'private - ffi' }
-GtPhlowRustObjectVec >> primLength [
-	^ self ffiCall: #(size_t phlow_object_vec_len(self))
-]
-
 { #category : #accessing }
 GtPhlowRustObjectVec >> size [
-	^ self primLength
+	^ self ffiLibrary primPhlowObjectVecGetLength: self
 ]
