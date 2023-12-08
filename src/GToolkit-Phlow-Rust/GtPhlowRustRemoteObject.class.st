@@ -19,7 +19,9 @@ GtPhlowRustRemoteObject class >> finalizeResourceData: aResourceData [
 	id := aResourceData first.
 	client := aResourceData second.
 
-	client releaseObject: id
+	[ client releaseObject: id ]
+		on: Error
+		do: [ :anError | "connection error?" ].
 ]
 
 { #category : #accessing }
