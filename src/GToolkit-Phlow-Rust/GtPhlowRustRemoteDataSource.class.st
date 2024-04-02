@@ -22,6 +22,10 @@ GtPhlowRustRemoteDataSource >> client: anObject [
 ]
 
 { #category : #accessing }
+GtPhlowRustRemoteDataSource >> flushItemsIterator [
+]
+
+{ #category : #accessing }
 GtPhlowRustRemoteDataSource >> methodSelector [
 	^ methodSelector
 ]
