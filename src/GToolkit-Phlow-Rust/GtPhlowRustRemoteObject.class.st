@@ -77,6 +77,16 @@ GtPhlowRustRemoteObject >> gtInspectorTitleStringOn: aStream [
 ]
 
 { #category : #accessing }
+GtPhlowRustRemoteObject >> gtMetaFor: aView [
+	^ aView empty
+]
+
+{ #category : #accessing }
+GtPhlowRustRemoteObject >> gtRawFor: aView [
+	^ aView empty
+]
+
+{ #category : #accessing }
 GtPhlowRustRemoteObject >> gtViewsFor: aView inContext: aContext [
 	"Add the remote views from the rust object to the inspectors views"
 	| resultingView inspectorViews |

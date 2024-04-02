@@ -22,6 +22,10 @@ GtPhlowRustRemoteDataSource >> client: anObject [
 ]
 
 { #category : #accessing }
+GtPhlowRustRemoteDataSource >> flushItemsIterator [
+]
+
+{ #category : #accessing }
 GtPhlowRustRemoteDataSource >> methodSelector [
 	^ methodSelector
 ]
@@ -50,7 +54,7 @@ GtPhlowRustRemoteDataSource >> retrieveItems: anItemsCount fromIndex: startIndex
 		items := client
 			retrieveViewItems: objectId
 			methodSelector: methodSelector.
-			
+		
 		objects := items collect: [ :item | GtPhlowRustRemoteObject fromDictionary: (item at: 'phlowObject') client: client ] ].
 
 	^ items
