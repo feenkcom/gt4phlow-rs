@@ -50,7 +50,7 @@ GtPhlowRustRemoteDataSource >> retrieveItems: anItemsCount fromIndex: startIndex
 		items := client
 			retrieveViewItems: objectId
 			methodSelector: methodSelector.
-			
+		
 		objects := items collect: [ :item | GtPhlowRustRemoteObject fromDictionary: (item at: 'phlowObject') client: client ] ].
 
 	^ items
