@@ -7,6 +7,17 @@ Class {
 	#category : #'GToolkit-Phlow-Rust-Utilities'
 }
 
+{ #category : #ui }
+GtPhlowRustSourceCode >> asBrMenuWithSelfObjectHolder: aSelfObjectHolder [
+	^ BrMenuExplicit new
+		stencil: [ :aMenuModel | 
+			| aCoderElement |
+			aCoderElement := (self gtRustFor: GtPhlowView empty) asElementDo: [ :e | e ].
+			aCoderElement addAptitude: (BrGlamorousPopoverDefiningMethodAptitude new
+				menuModel: aMenuModel).
+			aCoderElement ]
+]
+
 { #category : #'gt-extensions' }
 GtPhlowRustSourceCode >> gtPhlowIncludesCompiledMethod: aCompiledMethod [ 
 	^ false
