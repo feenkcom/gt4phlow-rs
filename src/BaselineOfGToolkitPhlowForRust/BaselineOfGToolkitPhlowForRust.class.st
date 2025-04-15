@@ -13,6 +13,6 @@ BaselineOfGToolkitPhlowForRust >> baseline: spec [
 				spec repository: 'github://feenkcom/gtoolkit-boxer:v0.8.54/boxer-bindings' ].
 
 		spec package: 'GToolkit-Phlow-Rust' with: [
-			spec requires: #('GToolkitBoxer') ].
+			spec requires: #(#GToolkitBoxer) ].
 	]
 ]
