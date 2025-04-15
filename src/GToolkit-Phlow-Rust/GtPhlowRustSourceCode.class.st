@@ -7,6 +7,24 @@ Class {
 	#category : #'GToolkit-Phlow-Rust-Utilities'
 }
 
+{ #category : #ui }
+GtPhlowRustSourceCode >> asBrMenuWithSelfObjectHolder: aSelfObjectHolder [
+	^ BrMenuExplicit new
+		stencil: [ :aMenuModel | 
+			| aCoderElement |
+			aCoderElement := (self gtRustFor: GtPhlowView empty) asElementDo: [ :e | e ].
+			aCoderElement
+				hExact: 500;
+				vFitContentLimited;
+				background: aCoderElement theme default contentBackgroundColor;
+				addAptitude: (BrGlamorousMenuPinnableAptitude new
+						menuModel: aMenuModel;
+						withResizers;
+						withAllPinActions);
+				addAptitude: (BrMenuHideableAptitude new menuModel: aMenuModel);
+				addAptitude: BrMenuCommonAptitude new ]
+]
+
 { #category : #'gt-extensions' }
 GtPhlowRustSourceCode >> gtPhlowIncludesCompiledMethod: aCompiledMethod [ 
 	^ false
