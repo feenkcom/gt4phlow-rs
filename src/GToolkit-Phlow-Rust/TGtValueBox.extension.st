@@ -39,6 +39,7 @@ TGtValueBox >> gtAsPhlowObjectActionFor: anAction [
 				ifTrue: [ anAction noAction ]
 				ifFalse: [
 					anAction button
+						id: #'phlow--inspect-rust-object';
 						priority: 1;
 						tooltip: 'Inspect Rust object';
 						icon:( self class environment at: #BrGlamorousVectorIcons) rustLogo;
