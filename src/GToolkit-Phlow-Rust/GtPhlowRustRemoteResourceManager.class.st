@@ -56,5 +56,5 @@ GtPhlowRustRemoteResourceManager >> addResource: anObject executor: anExecutor [
 
 { #category : #initialization }
 GtPhlowRustRemoteResourceManager >> initialize [ 
-	registry := WeakRegistry new
+	registry := FinalizationRegistry new.
 ]
