@@ -15,35 +15,32 @@ GtRustPhlowListView >> asPhlowView [
 		definingMethod: self sourceCode;
 		title: self title;
 		priority: self priority;
-		items: [ GtPhlowRustVectorCollection new vector: self computeItems ];
-		itemText: [ :eachItem | self computeItemText: eachItem ];
-		send: [ :eachItem | self computeItemSend: eachItem ];
+		items: [ 1 to: self itemsCount ];
+		itemText: [ :anIndex | self itemTextAt: anIndex ];
+		send: [ :anIndex | self itemSendAt: anIndex ];
 		actionUpdateButton
 ]
 
 { #category : #private }
-GtRustPhlowListView >> computeItemSend: anAnyVecItem [
-	^ GtRustPhlowObject
-		fromOwnedHandle: (self ffiLibrary
-			primPhlowListView: self
-			computeItemSend: anAnyVecItem objectVec
-			index: anAnyVecItem index - 1)
-		library: self ffiLibrary
+GtRustPhlowListView >> itemSendAt: anIndex [
+	| aHandle |
+	aHandle := self ffiLibrary
+			primPhlowListViewInstance: self rustViewInstance
+			getSendAt: anIndex - 1.
+
+	^ GtRustPhlowAnyObject fromOwnedHandle: aHandle library: self ffiLibrary
 ]
 
 { #category : #private }
-GtRustPhlowListView >> computeItemText: anAnyVecItem [
+GtRustPhlowListView >> itemTextAt: anIndex [
 	^ self ffiLibrary getStringFrom: [ :aStringBox |
 		self ffiLibrary
-			primPhlowList: self
-			computeItemText: aStringBox
-			items: anAnyVecItem objectVec
-			index: anAnyVecItem index - 1 ]
+			primPhlowListViewInstance: self rustViewInstance
+			getItemText: aStringBox
+			index: anIndex - 1 ]
 ]
 
 { #category : #private }
-GtRustPhlowListView >> computeItems [
-	^ GtPhlowRustObjectVec
-		fromOwnedHandle: (self ffiLibrary primPhlowListViewComputeItems: self)
-		library: self ffiLibrary
+GtRustPhlowListView >> itemsCount [
+	^ self ffiLibrary primPhlowListViewInstanceItemsCount: self rustViewInstance
 ]

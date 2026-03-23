@@ -23,6 +23,6 @@ GtRustPhlowTextView >> asPhlowView [
 GtRustPhlowTextView >> computeText [
 	^ self ffiLibrary getStringFrom: [ :aStringBox |
 		self ffiLibrary
-			primPhlowTextView: self
-			computeText: aStringBox ]
+			primPhlowTextViewInstance: self rustViewInstance
+			getText: aStringBox ]
 ]

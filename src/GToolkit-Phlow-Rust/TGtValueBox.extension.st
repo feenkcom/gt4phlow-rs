@@ -3,7 +3,7 @@ Extension { #name : #TGtValueBox }
 { #category : #'*GToolkit-Phlow-Rust' }
 TGtValueBox >> asPhlowObjectDo: aBlock ifNone: aNoneBlock [
 	"Try to get a phlow object for this value box and evaluate aBlock if it was successful"
-	| anFFILibrary isPhlowSupported aPhlowObjectHandle |
+	| anFFILibrary isPhlowSupported aPhlowVTableHandle |
 	
 	anFFILibrary := self ffiLibrary asFFILibrary.
 	
@@ -17,24 +17,25 @@ TGtValueBox >> asPhlowObjectDo: aBlock ifNone: aNoneBlock [
 	isPhlowSupported
 		ifFalse: [ ^ aNoneBlock value ].
 
-	aPhlowObjectHandle := [ anFFILibrary primValueBoxToPhlowObject: self ]
+	aPhlowVTableHandle := [ GtRustPhlowVTable fromOwnedHandle: self primGetPhlowVTable library: anFFILibrary ]
 		on: Error
 		do: [ :anError | ExternalData null ].
 	
-	aPhlowObjectHandle isNull
+	aPhlowVTableHandle isNull
 		ifTrue: [ ^ aNoneBlock value ].
 
-	^ aBlock value: (GtRustPhlowObject
-		fromOwnedHandle: aPhlowObjectHandle
-		library: anFFILibrary)
+	^ aBlock value: (GtRustPhlowObject new
+		valueBox: self
+		vtable: aPhlowVTableHandle)
 ]
 
 { #category : #'*GToolkit-Phlow-Rust' }
 TGtValueBox >> gtAsPhlowObjectActionFor: anAction [
 	<gtAction>
 	
-	^ self
-		asPhlowObjectDo: [ :aPhlowObject |
+	^ self ffiLibrary
+		asPhlowObject: self
+		do: [ :aPhlowObject |
 			aPhlowObject == self
 				ifTrue: [ anAction noAction ]
 				ifFalse: [
@@ -55,8 +56,9 @@ TGtValueBox >> gtPrintFor: aView [
 		priority: 110;
 		aptitude: [ self class environment at: #BrGlamorousCodeEditorAptitude ];
 		text: [
-			self
-				asPhlowObjectDo: [ :aPhlowObject | aPhlowObject rustToString ]
+			self ffiLibrary
+				asPhlowObject: self
+				do: [ :aPhlowObject | aPhlowObject rustToString ]
 				ifNone: [ self printString asRopedText ] ];
 		actionUpdateButton
 ]
@@ -70,14 +72,33 @@ TGtValueBox >> gtViewsFor: aView inContext: aContext [
 	inspectorViews := resultingView originalView views.
 
 	"Add the explicitly declarative views from the inspected object"
-	inspectorViews addAll: (self asPhlowObjectDo: [ :aPhlowObject |
-		aPhlowObject
-			rustPhlowViewsFor: aView
-			inContext: aContext ]
+	inspectorViews addAll: (self ffiLibrary
+		asPhlowObject: self
+		do: [ :aPhlowObject |
+			aPhlowObject
+				rustPhlowViewsFor: aView
+				inContext: aContext ]
 		ifNone: [ #() ]).
 
 	"Re-sort by priority"
 	inspectorViews := inspectorViews sorted: [ :a :b | a priority < b priority ].
 	resultingView originalView views: inspectorViews.
 	^ resultingView
+]
+
+{ #category : #'*GToolkit-Phlow-Rust' }
+TGtValueBox >> phlowVTable [
+	| aHandle |
+	
+	aHandle := self primGetPhlowVTable.
+	aHandle isNull ifTrue: [ ^ nil ].
+
+	^ GtRustPhlowVTable
+		fromOwnedHandle: aHandle
+		library: self ffiLibrary
+]
+
+{ #category : #'*GToolkit-Phlow-Rust' }
+TGtValueBox >> primGetPhlowVTable [
+	^ ExternalData null
 ]
