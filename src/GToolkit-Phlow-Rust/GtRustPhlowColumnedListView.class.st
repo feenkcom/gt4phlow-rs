@@ -11,7 +11,9 @@ GtRustPhlowColumnedListView class >> viewType [
 
 { #category : #converting }
 GtRustPhlowColumnedListView >> asPhlowView [
-	| aColumnedListView |
+	^ GtPhlowEmptyView new
+
+	"| aColumnedListView |
 
 	aColumnedListView := (self class environment at: #GtPhlowColumnedListView) new.
 	aColumnedListView
@@ -28,46 +30,51 @@ GtRustPhlowColumnedListView >> asPhlowView [
 	
 	aColumnedListView actionUpdateButton.
 
-	^ aColumnedListView
+	^ aColumnedListView"
 ]
 
 { #category : #private }
 GtRustPhlowColumnedListView >> computeAmountOfColumns [
-	^ self ffiLibrary primPhlowColumnedListGetAmountOfColumns: self
+	^ 0
+	"^ self ffiLibrary primPhlowColumnedListGetAmountOfColumns: self"
 ]
 
 { #category : #private }
 GtRustPhlowColumnedListView >> computeCellText: anAnyVecItem columnIndex: aColumnIndex [
-	^ self ffiLibrary getStringFrom: [ :aStringBox |
+	^ ''
+	"^ self ffiLibrary getStringFrom: [ :aStringBox |
 		self ffiLibrary
 		primPhlowColumnedList: self
 		computeCellText: aStringBox
 		items: anAnyVecItem objectVec 
 		row: anAnyVecItem index - 1
-		column: aColumnIndex - 1 ]
+		column: aColumnIndex - 1 ]"
 ]
 
 { #category : #private }
-GtRustPhlowColumnedListView >> computeColumnTitleAt: aColumnIndex [		
-	^ self ffiLibrary getStringFrom: [ :aStringBox | self ffiLibrary
+GtRustPhlowColumnedListView >> computeColumnTitleAt: aColumnIndex [
+	^ ''
+	"^ self ffiLibrary getStringFrom: [ :aStringBox | self ffiLibrary
 		primPhlowColumnedList: self
 		computeColumnTitle: aStringBox
-		index: aColumnIndex - 1 ]
+		index: aColumnIndex - 1 ]"
 ]
 
 { #category : #private }
 GtRustPhlowColumnedListView >> computeItemSend: anAnyVecItem [
-	^ GtRustPhlowObject
+	^ nil
+	"^ GtRustPhlowObject
 		fromOwnedHandle: (self ffiLibrary
 			primPhlowColumnedListView: self
 			computeItemSend: anAnyVecItem objectVec
 			index: anAnyVecItem index - 1)
-		library: self ffiLibrary
+		library: self ffiLibrary"
 ]
 
 { #category : #private }
 GtRustPhlowColumnedListView >> computeItems [
-	^ GtPhlowRustObjectVec
+	^ #()
+	"^ GtPhlowRustObjectVec
 		fromOwnedHandle: (self ffiLibrary primPhlowColumnedListViewComputeItems: self)
-		library: self ffiLibrary
+		library: self ffiLibrary"
 ]
