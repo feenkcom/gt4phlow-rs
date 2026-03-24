@@ -63,12 +63,12 @@ GtRustPhlowAnyObject >> printOn: aStream [
 GtRustPhlowAnyObject >> rustPrintOn: aStream [
 	<return: #String>
 	
-	^ self ffiLibrary
+	aStream nextPutAll: (self ffiLibrary
 		getStringFrom: [ :aStringBox | 
 			self ffiLibrary
 				primPhlowVTable: self vtable
 				toString: aStringBox
-				forAnyObject: self ]
+				forAnyObject: self ])
 ]
 
 { #category : #'as yet unclassified' }
