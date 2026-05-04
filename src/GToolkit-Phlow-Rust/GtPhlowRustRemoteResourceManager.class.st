@@ -44,14 +44,14 @@ GtPhlowRustRemoteResourceManager >> addResource: anObject [
 GtPhlowRustRemoteResourceManager >> addResource: anObject data: resourceData [
 	registry 
 		add: anObject 
-		executor: (GtPhlowRustRemoteResourceExecutor new 
+		finalizer: (GtPhlowRustRemoteResourceExecutor new 
 			resourceClass: anObject class
 			data: resourceData)
 ]
 
 { #category : #'external resource management' }
 GtPhlowRustRemoteResourceManager >> addResource: anObject executor: anExecutor [
-	registry add: anObject executor: anExecutor
+	registry add: anObject finalizer: anExecutor
 ]
 
 { #category : #initialization }
